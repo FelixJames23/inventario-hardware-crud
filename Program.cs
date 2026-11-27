@@ -1,6 +1,7 @@
-﻿using inventario_hardware_crud.Data;
+﻿using inventario_hardware_crud.Models;
+using inventario_hardware_crud.Services;
 
-var storage = new InventarioStorage();
+var servicio = new InventarioService();
 bool salir = false;
 
 while (!salir)
@@ -18,11 +19,71 @@ while (!salir)
 
     switch (opcion)
     {
+        case "1":
+            RegistrarNuevo(servicio);
+            break;
+        case "2":
+            MostrarInventario(servicio);
+            break;
         case "0":
             salir = true;
             break;
         default:
             Console.WriteLine("Opcion aun no disponible.");
             break;
+    }
+}
+
+static void RegistrarNuevo(InventarioService servicio)
+{
+    Console.Write("\nNombre del componente: ");
+    string nombre = Console.ReadLine() ?? "";
+
+    Console.Write("Categoria (CPU, GPU, RAM, etc.): ");
+    string categoria = Console.ReadLine() ?? "";
+
+    Console.Write("Marca: ");
+    string marca = Console.ReadLine() ?? "";
+
+    Console.Write("Precio: ");
+    if (!decimal.TryParse(Console.ReadLine(), out decimal precio))
+    {
+        Console.WriteLine("Precio invalido.");
+        return;
+    }
+
+    Console.Write("Stock inicial: ");
+    if (!int.TryParse(Console.ReadLine(), out int stock))
+    {
+        Console.WriteLine("Cantidad invalida.");
+        return;
+    }
+
+    var nuevo = new Componente
+    {
+        Nombre = nombre,
+        Categoria = categoria,
+        Marca = marca,
+        Precio = precio,
+        Stock = stock
+    };
+
+    servicio.AgregarComponente(nuevo);
+    Console.WriteLine("Componente registrado correctamente.");
+}
+
+static void MostrarInventario(InventarioService servicio)
+{
+    var lista = servicio.ObtenerTodos();
+    if (lista.Count == 0)
+    {
+        Console.WriteLine("\nNo hay componentes registrados.");
+        return;
+    }
+
+    Console.WriteLine("\n--- LISTA DE COMPONENTES ---");
+    foreach (var c in lista)
+    {
+        Console.WriteLine($"ID: {c.Id} | {c.Nombre} ({c.Marca}) - Cat: {c.Categoria} | Precio: ${c.Precio:N2} | Stock: {c.Stock}");
     }
 }
