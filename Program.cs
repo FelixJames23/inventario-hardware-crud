@@ -31,11 +31,14 @@ while (!salir)
         case "4":
             EliminarItem(servicio);
             break;
+        case "5":
+            FiltrarPorCategoria(servicio);
+            break;
         case "0":
             salir = true;
             break;
         default:
-            Console.WriteLine("Opcion aun no disponible.");
+            Console.WriteLine("Opcion no valida.");
             break;
     }
 }
@@ -146,4 +149,23 @@ static void EliminarItem(InventarioService servicio)
         Console.WriteLine("Componente eliminado del inventario.");
     else
         Console.WriteLine("No se encontro ningun componente con ese ID.");
+}
+
+static void FiltrarPorCategoria(InventarioService servicio)
+{
+    Console.Write("\nIngresa la categoria a buscar (ej. GPU, CPU, RAM): ");
+    string categoria = Console.ReadLine() ?? "";
+
+    var resultados = servicio.BuscarPorCategoria(categoria);
+    if (resultados.Count == 0)
+    {
+        Console.WriteLine("No se encontraron componentes en esa categoria.");
+        return;
+    }
+
+    Console.WriteLine($"\n--- RESULTADOS PARA '{categoria.ToUpper()}' ---");
+    foreach (var c in resultados)
+    {
+        Console.WriteLine($"ID: {c.Id} | {c.Nombre} ({c.Marca}) | Precio: ${c.Precio:N2} | Stock: {c.Stock}");
+    }
 }
