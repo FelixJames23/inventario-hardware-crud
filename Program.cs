@@ -54,31 +54,39 @@ static void RegistrarNuevo(InventarioService servicio)
     Console.Write("Marca: ");
     string marca = Console.ReadLine() ?? "";
 
-    Console.Write("Precio: ");
-    if (!decimal.TryParse(Console.ReadLine(), out decimal precio))
+    if (string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(categoria))
     {
-        Console.WriteLine("Precio invalido.");
+        Console.WriteLine("El nombre y la categoria son obligatorios.");
+        return;
+    }
+
+    Console.Write("Precio: ");
+    if (!decimal.TryParse(Console.ReadLine(), out decimal precio) || precio <= 0)
+    {
+        Console.WriteLine("Precio invalido. Debe ser mayor a 0.");
         return;
     }
 
     Console.Write("Stock inicial: ");
-    if (!int.TryParse(Console.ReadLine(), out int stock))
+    if (!int.TryParse(Console.ReadLine(), out int stock) || stock < 0)
     {
-        Console.WriteLine("Cantidad invalida.");
+        Console.WriteLine("Cantidad invalida. No puede ser negativa.");
         return;
     }
 
     var nuevo = new Componente
     {
-        Nombre = nombre,
-        Categoria = categoria,
-        Marca = marca,
+        Nombre = nombre.Trim(),
+        Categoria = categoria.Trim(),
+        Marca = marca.Trim(),
         Precio = precio,
         Stock = stock
     };
 
-    servicio.AgregarComponente(nuevo);
-    Console.WriteLine("Componente registrado correctamente.");
+    if (servicio.AgregarComponente(nuevo))
+        Console.WriteLine("Componente registrado correctamente.");
+    else
+        Console.WriteLine("No se pudo registrar el componente. Revisa los datos.");
 }
 
 static void MostrarInventario(InventarioService servicio)
@@ -107,16 +115,16 @@ static void ActualizarComponente(InventarioService servicio)
     }
 
     Console.Write("Nuevo precio: ");
-    if (!decimal.TryParse(Console.ReadLine(), out decimal nuevoPrecio))
+    if (!decimal.TryParse(Console.ReadLine(), out decimal nuevoPrecio) || nuevoPrecio <= 0)
     {
-        Console.WriteLine("Precio invalido.");
+        Console.WriteLine("Precio invalido. Debe ser mayor a 0.");
         return;
     }
 
     Console.Write("Nuevo stock disponible: ");
-    if (!int.TryParse(Console.ReadLine(), out int nuevoStock))
+    if (!int.TryParse(Console.ReadLine(), out int nuevoStock) || nuevoStock < 0)
     {
-        Console.WriteLine("Stock invalido.");
+        Console.WriteLine("Stock invalido. No puede ser negativo.");
         return;
     }
 
