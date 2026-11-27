@@ -49,5 +49,13 @@ namespace inventario_hardware_crud.Services
             _storage.Guardar(lista);
             return true;
         }
+
+        public List<Componente> BuscarPorCategoria(string categoria)
+        {
+            var lista = _storage.Cargar();
+            return lista
+                .Where(c => c.Categoria.Equals(categoria.Trim(), StringComparison.OrdinalIgnoreCase))
+                .ToList();
+        }
     }
 }
