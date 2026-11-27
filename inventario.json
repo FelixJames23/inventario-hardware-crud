@@ -1,0 +1,10 @@
+[
+  {
+    "Id": 1,
+    "Nombre": "Mouse Glorious",
+    "Categoria": "etc",
+    "Marca": "Glorious",
+    "Precio": 25000,
+    "Stock": 1
+  }
+]
