@@ -25,6 +25,9 @@ while (!salir)
         case "2":
             MostrarInventario(servicio);
             break;
+        case "3":
+            ActualizarComponente(servicio);
+            break;
         case "0":
             salir = true;
             break;
@@ -86,4 +89,34 @@ static void MostrarInventario(InventarioService servicio)
     {
         Console.WriteLine($"ID: {c.Id} | {c.Nombre} ({c.Marca}) - Cat: {c.Categoria} | Precio: ${c.Precio:N2} | Stock: {c.Stock}");
     }
+}
+
+static void ActualizarComponente(InventarioService servicio)
+{
+    Console.Write("\nID del componente a actualizar: ");
+    if (!int.TryParse(Console.ReadLine(), out int id))
+    {
+        Console.WriteLine("ID invalido.");
+        return;
+    }
+
+    Console.Write("Nuevo precio: ");
+    if (!decimal.TryParse(Console.ReadLine(), out decimal nuevoPrecio))
+    {
+        Console.WriteLine("Precio invalido.");
+        return;
+    }
+
+    Console.Write("Nuevo stock disponible: ");
+    if (!int.TryParse(Console.ReadLine(), out int nuevoStock))
+    {
+        Console.WriteLine("Stock invalido.");
+        return;
+    }
+
+    bool actualizado = servicio.ActualizarStockYPrecio(id, nuevoPrecio, nuevoStock);
+    if (actualizado)
+        Console.WriteLine("Componente actualizado correctamente.");
+    else
+        Console.WriteLine("No se encontro ningun componente con ese ID.");
 }
