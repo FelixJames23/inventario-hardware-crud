@@ -28,6 +28,9 @@ while (!salir)
         case "3":
             ActualizarComponente(servicio);
             break;
+        case "4":
+            EliminarItem(servicio);
+            break;
         case "0":
             salir = true;
             break;
@@ -117,6 +120,30 @@ static void ActualizarComponente(InventarioService servicio)
     bool actualizado = servicio.ActualizarStockYPrecio(id, nuevoPrecio, nuevoStock);
     if (actualizado)
         Console.WriteLine("Componente actualizado correctamente.");
+    else
+        Console.WriteLine("No se encontro ningun componente con ese ID.");
+}
+
+static void EliminarItem(InventarioService servicio)
+{
+    Console.Write("\nID del componente a eliminar: ");
+    if (!int.TryParse(Console.ReadLine(), out int id))
+    {
+        Console.WriteLine("ID invalido.");
+        return;
+    }
+
+    Console.Write("Seguro que deseas eliminar este componente? (s/n): ");
+    string? confirmar = Console.ReadLine();
+    if (confirmar?.Trim().ToLower() != "s")
+    {
+        Console.WriteLine("Operacion cancelada.");
+        return;
+    }
+
+    bool eliminado = servicio.EliminarComponente(id);
+    if (eliminado)
+        Console.WriteLine("Componente eliminado del inventario.");
     else
         Console.WriteLine("No se encontro ningun componente con ese ID.");
 }

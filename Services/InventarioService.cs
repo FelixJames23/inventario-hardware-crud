@@ -37,5 +37,17 @@ namespace inventario_hardware_crud.Services
             _storage.Guardar(lista);
             return true;
         }
+
+        public bool EliminarComponente(int id)
+        {
+            var lista = _storage.Cargar();
+            var item = lista.FirstOrDefault(c => c.Id == id);
+            if (item == null)
+                return false;
+
+            lista.Remove(item);
+            _storage.Guardar(lista);
+            return true;
+        }
     }
 }
