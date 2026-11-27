@@ -17,16 +17,26 @@ namespace inventario_hardware_crud.Services
             return _storage.Cargar();
         }
 
-        public void AgregarComponente(Componente componente)
+        public bool AgregarComponente(Componente componente)
         {
+            if (string.IsNullOrWhiteSpace(componente.Nombre) || string.IsNullOrWhiteSpace(componente.Categoria))
+                return false;
+
+            if (componente.Precio <= 0 || componente.Stock < 0)
+                return false;
+
             var lista = _storage.Cargar();
             componente.Id = lista.Count > 0 ? lista.Max(c => c.Id) + 1 : 1;
             lista.Add(componente);
             _storage.Guardar(lista);
+            return true;
         }
 
         public bool ActualizarStockYPrecio(int id, decimal nuevoPrecio, int nuevoStock)
         {
+            if (nuevoPrecio <= 0 || nuevoStock < 0)
+                return false;
+
             var lista = _storage.Cargar();
             var item = lista.FirstOrDefault(c => c.Id == id);
             if (item == null)
